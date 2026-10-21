@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="MCP Manager">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#101a24"/>
+  <rect x="12" y="14" width="40" height="10" rx="5" fill="#1f3346"/>
+  <circle cx="18.5" cy="19" r="2.5" fill="#3ecf8e"/>
+  <rect x="25" y="17.4" width="21" height="3.2" rx="1.6" fill="#7f9cb5"/>
+  <rect x="12" y="27" width="40" height="10" rx="5" fill="#1f3346"/>
+  <circle cx="18.5" cy="32" r="2.5" fill="#3ecf8e"/>
+  <rect x="25" y="30.4" width="16" height="3.2" rx="1.6" fill="#7f9cb5"/>
+  <rect x="12" y="40" width="40" height="10" rx="5" fill="#1f3346"/>
+  <circle cx="18.5" cy="45" r="2.5" fill="#f0b429"/>
+  <rect x="25" y="43.4" width="19" height="3.2" rx="1.6" fill="#7f9cb5"/>
+</svg>

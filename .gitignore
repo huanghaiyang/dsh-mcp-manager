@@ -1,0 +1,33 @@
+# 依赖与构建产物
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+
+# 运行时/诊断产物（真实的自检文件写在 $DSH_HOME，不在仓库里）
+*.log
+*.tmp
+*.status.json
+.pnpm-debug.log*
+
+# 本地环境与密钥
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.*
+.credentials*
+
+# 编辑器与系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# 生成的图片等大件
+generate/

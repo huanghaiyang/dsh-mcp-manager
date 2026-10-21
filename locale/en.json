@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MCP Manager",
+    "description": "Inspect the registered MCP servers and their runtime status: entry lifecycle, transport and endpoint, mcp__* tool inventory, recent connection events, plus on-demand connectivity probes."
+  }
+}

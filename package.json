@@ -1,0 +1,40 @@
+{
+  "name": "@local/dsh-mcp-manager",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "查看当前注册的 MCP 服务器及其运行状态：条目生命周期、传输与地址、mcp__* 工具清单、连接日志与主动连通性探测。",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "icon.svg",
+    "locale/*.json",
+    "README.md"
+  ],
+  "icon": "./icon.svg",
+  "scripts": {
+    "test": "node tests/host-smoke.mjs && node tests/client-smoke.mjs && node tests/client-globals-isolation.mjs",
+    "check:secrets": "node scripts/scan-secrets.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  }
+}

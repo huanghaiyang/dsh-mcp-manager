@@ -1,0 +1,15 @@
+# MCP 管理器：只读观测插件。
+#
+# ⚠ 行名必须是包名本身（`@local/dsh-mcp-manager`），不能写成子路径。
+#   dsh-client-modules 用 exactPackageSpecifier(行名) 反查包清单：子路径会让它
+#   找不到包 —— 宿主半边照常运行，但浏览器半边永远不进装配表，设置里也就看不到入口。
+#
+# config 里的两个键都可选（本插件不声明 Config，按代码内默认值归一化）：
+#   logLimit        - 保留多少条 mcp-client 连接日志（默认 240）
+#   probeTimeoutMs  - 「测试连接」的单次往返超时（默认 8000）
+- insert:
+    - id: mcp-manager
+      name: '@local/dsh-mcp-manager'
+      config:
+        logLimit: 240
+        probeTimeoutMs: 8000

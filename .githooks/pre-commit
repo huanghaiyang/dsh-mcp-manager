@@ -1,0 +1,32 @@
+#!/bin/sh
+# 提交前扫描敏感信息：只看本次暂存的文件，命中即拒绝提交。
+# 注意：文件清单由 git 自己写出（-z 保真文件名），Node 只做纯 fs 扫描，不 spawn 子进程。
+set -e
+
+root=$(git rev-parse --show-toplevel)
+cd "$root"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "scan-secrets: 未找到 node，跳过预提交扫描"
+  exit 0
+fi
+
+list=$(mktemp 2>/dev/null || echo "$root/.git/.staged-files")
+trap 'rm -f "$list"' EXIT HUP INT TERM
+
+git diff --cached --name-only -z --diff-filter=ACMR > "$list"
+
+if [ ! -s "$list" ]; then
+  exit 0
+fi
+
+if node scripts/scan-secrets.mjs --from-file "$list"; then
+  exit 0
+fi
+
+echo ""
+echo "拒绝提交：暂存区里有疑似敏感信息。"
+echo "· 移除/替换后重新 add；"
+echo "· 确属假值（文档示例、测试夹具）请加进 scripts/scan-secrets.mjs 的 FAKE_VALUES；"
+echo "· 应急提交可加 --no-verify，但请确认内容无害。"
+exit 1
