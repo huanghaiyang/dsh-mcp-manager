@@ -95,6 +95,25 @@ node --check index.js && node --check client.js
 `client-smoke` 断言渲染结果里出现每台服务器的状态、端点、键名、探测细节与事件，
 并且不会漏出 `[object Object]` / `undefined` / `NaN`。
 
+## 仓库与敏感信息
+
+仓库已 `git init`（分支 `main`），`core.hooksPath` 指向 `.githooks`：
+
+```bash
+node scripts/scan-secrets.mjs        # 全量扫描（跳过 node_modules/.git/dist；二进制与 >2MB 跳过）
+npm run check:secrets                # 同上
+git commit                           # 触发 .githooks/pre-commit，只扫暂存区，命中即拒绝提交
+```
+
+- 扫描器**不 spawn 任何子进程**（本沙箱下 Node 抓子进程管道会 EPERM）：文件清单由参数、
+  `--from-file` 或自身 fs 遍历得到，git 只在外层钩子里用。
+- 命中项只回显值的头 4 个字符，避免把密钥再抄进终端日志。
+- 已知假值（测试夹具里的 `super-secret`、文档里的占位符）列在
+  [scripts/scan-secrets.mjs](scripts/scan-secrets.mjs) 的 `FAKE_VALUES`，需要时往那里加。
+- 忽略项见 [.gitignore](.gitignore)：`node_modules/`、`*.status.json`、`.env*`、密钥文件等。
+  真实自检文件写在 `$DSH_HOME/mcp-manager.status.json`，本来就不在仓库里。
+- 本插件自身**不采集任何凭据**：环境变量与请求头只出键名，密钥值连快照都不进（有测试断言）。
+
 ## 配置
 
 本插件不声明 `Config`，`cordis.patch.yml` 里的两个键都可选：
@@ -115,3 +134,7 @@ node --check index.js && node --check client.js
   已连接时才真正发一次 `resources/list`。服务器不支持 resources 时无法据此区分
   （会显示“已连通；服务器未实现 resources/list”这类协议错误）。
 - 环境变量与请求头**只显示键名**，不显示值。
+- `GET /api/mcp-manager.state` 的 `requestBody` 必须写 `buffered`（连接层契约只有
+  `buffered`/`streaming`，写别的值会给 GET 挂上请求体并 400）。浏览器半边对旧宿主的
+  400/404 有一条回退：改用 `POST .probe` 并声明一台不存在的服务器（“探测 0 台”），
+  只取快照、不碰任何服务器；宿主重启后主路径生效，回退自然闲置。
